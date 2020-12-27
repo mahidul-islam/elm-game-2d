@@ -27,17 +27,42 @@ main =
 view computer (x,y) =
     List.concat
     [
-        [ square blue 40
-            |> move x y
-        ]
-        ,
+        -- [ square blue 40
+        --     |> move x y
+        -- ]
+        -- ,
         gameBoard computer (x, y)
     ]
 
 gameBoard computer (x,y) =
+        let
+            borderCross =  if (x < ((constants computer).height / 2) && y < ((constants computer).height / 2)
+                                && x > -((constants computer).height / 2) && y > -((constants computer).height / 2))then
+                                move x y
+                            else if x >= ((constants computer).height / 2) && y >= ((constants computer).height / 2) then
+                                move ((constants computer).height / 2) ((constants computer).height / 2)
+                            else if x <= -((constants computer).height / 2) && y >= ((constants computer).height / 2) then
+                                move -((constants computer).height / 2) ((constants computer).height / 2)
+                            else if x >= ((constants computer).height / 2) && y <= -((constants computer).height / 2) then
+                                move ((constants computer).height / 2) -((constants computer).height / 2)
+                            else if x <= -((constants computer).height / 2) && y <= -((constants computer).height / 2) then
+                                move -((constants computer).height / 2) -((constants computer).height / 2)
+                            else if x >= ((constants computer).height / 2) then
+                                move ((constants computer).height / 2) y
+                            else if x <= -((constants computer).height / 2) then
+                                move -((constants computer).height / 2) y
+                            else if y >= ((constants computer).height / 2) then
+                                move x ((constants computer).height / 2)
+                            else if y <= -((constants computer).height / 2) then
+                                move x -((constants computer).height / 2)
+                            else
+                                move 0 0
+
+        in
         List.concat [
             [ square blue 40
-            |> move x y
+            -- |> move x y
+                |> borderCross
             ]
             ,
             [
