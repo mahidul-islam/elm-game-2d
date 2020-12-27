@@ -36,8 +36,12 @@ view computer (x,y) =
 
 gameBoard computer (x,y) =
         let
-            borderCross =  if (x < ((constants computer).height / 2) && y < ((constants computer).height / 2)
+            inside = if (x < ((constants computer).height / 2) && y < ((constants computer).height / 2)
                                 && x > -((constants computer).height / 2) && y > -((constants computer).height / 2))then
+                                True
+                            else
+                                False
+            borderCross =  if (inside) then
                                 move x y
                             else if x >= ((constants computer).height / 2) && y >= ((constants computer).height / 2) then
                                 move ((constants computer).height / 2) ((constants computer).height / 2)
@@ -84,13 +88,44 @@ gameBoard computer (x,y) =
                 rectangle black (constants computer).height 2
                 |> move 0 -((constants computer).height / 2)
             ]
+            ,
+            [
+                words black ("x = " ++ (String.fromFloat x))
+                |> move ((constants computer).height) 0
+                ,
+                words black ("y = " ++ (String.fromFloat y))
+                |> move ((constants computer).height) -50
+            ]
         ]
 
 -- viewGame =
 
 update computer (x,y) =
-    ( x + 10 * toX computer.keyboard
-    , y + 10 * toY computer.keyboard
-    )
+    if ((x > ((constants computer).height / 2) && (y > ((constants computer).height / 2))) ||
+        (x > ((constants computer).height / 2) && (y < -((constants computer).height / 2))) ||
+        (x < -((constants computer).height / 2) && (y > ((constants computer).height / 2))) ||
+        (x < -((constants computer).height / 2) && (y < -((constants computer).height / 2)))) then
+        ( x
+        , y
+        -- , Debug.log "Hello"
+        )
+    else
+    if ((x >= ((constants computer).height / 2) && computer.keyboard.right) ||
+        (x <= -((constants computer).height / 2) && computer.keyboard.left )) then
+        ( x
+        , y + 10 * toY computer.keyboard
+        -- , Debug.log "Hello"
+        )
+    else if ((y >= ((constants computer).height / 2) && computer.keyboard.up) ||
+            (y <= -((constants computer).height / 2) && computer.keyboard.down )) then
+        ( x + 10 * toX computer.keyboard
+        , y
+        -- , Debug.log "Hello"
+        )
+    else
+        ( x + 10 * toX computer.keyboard
+        , y + 10 * toY computer.keyboard
+        -- , Debug.log "Hello"
+        )
 
 
